@@ -2,6 +2,10 @@ import json
 from flask import Flask,render_template,request,redirect,flash,url_for
 
 
+
+MAX_PLACES = 12
+
+
 def loadClubs():
     with open('clubs.json') as c:
          listOfClubs = json.load(c)['clubs']
@@ -19,6 +23,29 @@ app.secret_key = 'something_special'
 
 competitions = loadCompetitions()
 clubs = loadClubs()
+
+def initialize_club_points(comps, _clubs):
+    places = []
+    for comp in comps:
+        for club in _clubs:
+            places.append({'competition': comp['name'], 'booked': [0, club['name']]})
+
+    return places
+
+
+already_booked = initialize_club_points(competitions, clubs)
+
+def update_competition(competition, club, places_required):
+    
+    for i in already_booked:
+        if i['competition'] == competition['name']:
+            if i['booked'][0] + places_required <= MAX_PLACES:
+                i['booked'][0] += places_required
+                i['booked'][1] == club['name']
+                break
+            else:
+                raise ValueError(f"Booking more than {MAX_PLACES} places in a competition is not allowed.")
+            
 
 @app.route('/')
 def index():
@@ -54,18 +81,31 @@ def purchasePlaces():
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     places_required = int(request.form['places'])
     available_club_points = int(club['points'])  
-    
     if places_required > available_club_points:
         flash("Isufficient points to book this amount of places.")
         return render_template('welcome.html', club=club, competitions=competitions)
     elif available_club_points < places_required :
         flash("Isufficient places available.")
         return render_template('welcome.html', club=club, competitions=competitions)
-    else:
-        club['points'] = available_club_points - places_required
-        competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-places_required
-        flash('Great-booking complete!')
-        return render_template('welcome.html', club=club, competitions=competitions)   
+
+    #add max booking places
+    try:        
+        if places_required > MAX_PLACES:
+            flash(f"You cannot book more than {MAX_PLACES} places in a single competition.")
+            return render_template('welcome.html', club=club, competitions=competitions)
+    
+        #add point deduction
+        else:
+            competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-places_required
+            update_competition(competition, club, places_required)
+            club['points'] = available_club_points - places_required
+            available_club_points = int(club['points']) - places_required
+            flash('Great-booking complete!')
+            return render_template('welcome.html', club=club, competitions=competitions)
+
+    except ValueError as e:
+        flash(str(e))
+        return render_template('welcome.html', club=club, competitions=competitions)
 
 # TODO: Add route for points display
 
