@@ -62,10 +62,10 @@ def purchasePlaces():
         flash("Isufficient places available.")
         return render_template('welcome.html', club=club, competitions=competitions)
     else:
+        club['points'] = available_club_points - places_required
         competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-places_required
         flash('Great-booking complete!')
-        return render_template('welcome.html', club=club, competitions=competitions)
-
+        return render_template('welcome.html', club=club, competitions=competitions)   
 
 # TODO: Add route for points display
 
