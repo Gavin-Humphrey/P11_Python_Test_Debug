@@ -72,7 +72,7 @@ class TestMax12PointsBooking:
             }
         )
         data = response.data.decode()
-        assert response.status_code == 200
+        assert response.status_code == 400
         assert f"You cannot book more than {MAX_PLACES} places in a single competition." in data
 
 
