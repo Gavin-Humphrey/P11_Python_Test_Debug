@@ -92,7 +92,7 @@ def purchasePlaces():
     try:        
         if places_required > MAX_PLACES:
             flash(f"You cannot book more than {MAX_PLACES} places in a single competition.")
-            return render_template('welcome.html', club=club, competitions=competitions)
+            return render_template('welcome.html', club=club, competitions=competitions), 400
     
         #add point deduction
         else:
