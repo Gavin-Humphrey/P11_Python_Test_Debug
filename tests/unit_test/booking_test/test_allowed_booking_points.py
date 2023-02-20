@@ -62,5 +62,5 @@ class TestBooking:
         data = response.data.decode()
         error_message = "Isufficient points to book this amount of places."
         assert club_point >= 0
-        assert response.status_code == 200
+        assert response.status_code == 400
         assert error_message in data
