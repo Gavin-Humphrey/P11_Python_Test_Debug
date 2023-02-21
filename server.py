@@ -76,10 +76,7 @@ def purchasePlaces():
     elif available_club_points < places_required :
         flash("Isufficient places available.")
         return render_template('welcome.html', club=club, competitions=competitions), 400
-    else:
-        competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-places_required
-        flash('Great-booking complete!')
-        return render_template('welcome.html', club=club, competitions=competitions)
+  
 
     #add max booking places
     try:        
@@ -101,6 +98,11 @@ def purchasePlaces():
         return render_template('welcome.html', club=club, competitions=competitions)
    
 # TODO: Add route for points display
+
+@app.route("/display_board")
+def display_board():
+    return render_template("display_board.html", clubs=clubs)
+
 
 
 @app.route('/logout')
