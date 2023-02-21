@@ -81,6 +81,24 @@ def purchasePlaces():
         flash('Great-booking complete!')
         return render_template('welcome.html', club=club, competitions=competitions)
 
+    #add max booking places
+    try:        
+        if places_required > MAX_PLACES:
+            flash(f"You cannot book more than {MAX_PLACES} places in a single competition.")
+            return render_template('welcome.html', club=club, competitions=competitions), 400
+    
+        #add point deduction
+        else:
+            competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-places_required
+            update_competition(competition, club, places_required)
+            club['points'] = available_club_points - places_required
+            available_club_points = int(club['points']) - places_required
+            flash('Great-booking complete!')
+            return render_template('welcome.html', club=club, competitions=competitions)
+
+    except ValueError as e:
+        flash(str(e))
+        return render_template('welcome.html', club=club, competitions=competitions)
    
 # TODO: Add route for points display
 
