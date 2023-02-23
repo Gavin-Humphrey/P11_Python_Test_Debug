@@ -12,7 +12,7 @@ competitions = utils.loadCompetitions()
 clubs = utils.loadClubs()
 
 
-def initialize_club_points(comps, _clubs):
+def initialize_booking(comps, _clubs):
     places = []
     for comp in comps:
         for club in _clubs:
@@ -20,9 +20,13 @@ def initialize_club_points(comps, _clubs):
     return places
 
 
-already_booked = initialize_club_points(competitions, clubs)
+already_booked = initialize_booking(competitions, clubs)
 
+<<<<<<< HEAD
 def update_competition(competition, club, places_required, already_booked):
+=======
+def update_competition_booking(competition, club, places_required, already_booked):
+>>>>>>> feature/implement_points_display_board
     
     for i in already_booked:
         if i['competition'] == competition['name']:
@@ -33,7 +37,10 @@ def update_competition(competition, club, places_required, already_booked):
             else:
                 raise ValueError(f"Booking more than {MAX_PLACES} places in a competition is not allowed.")
     return already_booked
+<<<<<<< HEAD
             
+=======
+>>>>>>> feature/implement_points_display_board
 
 @app.route('/')
 def index():
@@ -57,7 +64,14 @@ def book(competition,club):
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
     if foundClub and foundCompetition:
+<<<<<<< HEAD
         return render_template('booking.html',club=foundClub,competition=foundCompetition, MAX_PLACES=MAX_PLACES)
+=======
+        if 'past_competition' in foundCompetition and foundCompetition['past_competition'] == True:
+            flash(f"The {competition} competition is over and cannot be booked!")
+            return render_template('welcome.html', club=foundClub, competitions=competitions), 400  
+        return render_template('booking.html', club=foundClub,competition=foundCompetition, club_point=int(foundClub['points']), MAX_PLACES=MAX_PLACES)
+>>>>>>> feature/implement_points_display_board
     else:
         flash("Something went wrong-please try again")
         return render_template('welcome.html', club=club, competitions=competitions)
@@ -74,8 +88,12 @@ def purchasePlaces():
     elif available_club_points < places_required :
         flash("Isufficient places available.")
         return render_template('welcome.html', club=club, competitions=competitions), 400
+<<<<<<< HEAD
   
 
+=======
+    
+>>>>>>> feature/implement_points_display_board
     #add max booking places
     try:        
         if places_required > MAX_PLACES:
@@ -84,7 +102,11 @@ def purchasePlaces():
     
         #add point deduction
         else:
+<<<<<<< HEAD
             update_competition(competition, club, places_required, already_booked)
+=======
+            update_competition_booking(competition, club, places_required, already_booked)
+>>>>>>> feature/implement_points_display_board
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-places_required
             club['points'] = available_club_points - places_required
             available_club_points = int(club['points']) - places_required
@@ -96,12 +118,18 @@ def purchasePlaces():
         return render_template('welcome.html', club=club, competitions=competitions)
    
 # TODO: Add route for points display
+<<<<<<< HEAD
 
 @app.route("/display_board")
 def display_board():
     return render_template("display_board.html", clubs=clubs)
 
 
+=======
+@app.route("/display_board")
+def display_board():
+    return render_template("display_board.html", clubs=clubs)
+>>>>>>> feature/implement_points_display_board
 
 @app.route('/logout')
 def logout():

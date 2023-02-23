@@ -61,4 +61,9 @@ class TestIntegration:
         assert self.client.get("/display_board").status_code == 200
         data = data = self.client.get("/display_board").data.decode()
         assert f'{self.club[0]["name"]}' in data
+<<<<<<< HEAD
         assert f'<td style="border: 2px solid rgb(163, 34, 42)">{self.club[0]["points"]}</td>' in data
+=======
+        assert f'<td style="border: 2px solid rgb(163, 34, 42)">{self.club[0]["points"]}</td>' in data
+        
+>>>>>>> feature/implement_points_display_board
