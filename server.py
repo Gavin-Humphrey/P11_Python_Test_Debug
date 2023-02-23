@@ -35,7 +35,7 @@ def initialize_club_points(comps, _clubs):
 
 already_booked = initialize_club_points(competitions, clubs)
 
-def update_competition(competition, club, places_required):
+def update_competition(competition, club, places_required, already_booked):
     
     for i in already_booked:
         if i['competition'] == competition['name']:
@@ -45,6 +45,7 @@ def update_competition(competition, club, places_required):
                 break
             else:
                 raise ValueError(f"Booking more than {MAX_PLACES} places in a competition is not allowed.")
+    return already_booked
             
 
 @app.route('/')
@@ -69,7 +70,7 @@ def book(competition,club):
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
     if foundClub and foundCompetition:
-        return render_template('booking.html',club=foundClub,competition=foundCompetition)
+        return render_template('booking.html',club=foundClub,competition=foundCompetition, MAX_PLACES=MAX_PLACES)
     else:
         flash("Something went wrong-please try again")
         return render_template('welcome.html', club=club, competitions=competitions)
@@ -96,8 +97,8 @@ def purchasePlaces():
     
         #add point deduction
         else:
+            update_competition(competition, club, places_required, already_booked)
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-places_required
-            update_competition(competition, club, places_required)
             club['points'] = available_club_points - places_required
             available_club_points = int(club['points']) - places_required
             flash('Great-booking complete!')
