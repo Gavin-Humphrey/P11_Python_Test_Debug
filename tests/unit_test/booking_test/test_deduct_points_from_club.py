@@ -7,9 +7,9 @@ class TestBooking:
 
     """
     GIVEN a connected Client
-    WHEN Client tries to make bookings
-    THEN check that the is not zero and 
-    is allowed for number of booking places.
+    WHEN Client makes a booking
+    THEN the points are deducted based on 
+    number of booking places booked.
     """
     club = [
         {

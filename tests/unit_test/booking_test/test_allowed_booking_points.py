@@ -8,7 +8,7 @@ class TestBooking:
     """
     GIVEN a connected Client
     WHEN Client tries to make bookings
-    THEN check that the is not zero and 
+    THEN check that points is not zero and 
     is allowed for number of booking places.
     """
     club = [
