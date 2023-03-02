@@ -13,7 +13,7 @@ class GUDLFT(HttpUser):
 
     @task
     def book(self):
-        self.client.get("/book/Fall Classic/Simply Lift")
+        self.client.get("/book/Future Competition/New Temple")
 
     @task
     def purchasePlaces(self):
@@ -21,8 +21,8 @@ class GUDLFT(HttpUser):
             "/purchasePlaces",
             data={
                 "places": 1, 
-                "club": "Iron Temple",
-                "competition": "Fall Classic"
+                "club": "New Temple",
+                "competition": "Future Competition"
             }
         )
 
